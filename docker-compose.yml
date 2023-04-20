@@ -59,6 +59,26 @@ services:
       - postgres
       - customers-service
   
+  transactions-service:
+    container_name: transactions
+    build:
+      context: ./transactions
+      dockerfile: Dockerfile
+    ports:
+      - "8083:8083"
+    expose:
+      # opens port on container
+      - "8083"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/bank_management
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+      ACCOUNT_SERVICE_URL: http://accounts:8082
+    networks:
+      - public-app
+    depends_on:
+      - postgres
+      - accounts-service
 
 volumes:
   postgres-data:
