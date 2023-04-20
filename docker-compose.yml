@@ -1,0 +1,45 @@
+version: "3.9"
+services:
+  postgres:
+    image: postgres:12.9
+    container_name: database
+    restart: always
+    volumes:
+      - ./schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: bank_management
+    networks:
+      - public-app
+    ports:
+      # port running inside container
+      - "5432:5432"
+    expose:
+      # opens port on container
+      - "5432"
+
+  customers-service:
+    container_name: customers
+    build:
+      context: ./customers
+      dockerfile: Dockerfile
+    ports:
+      - "8081:8081"
+    expose:
+      # opens port on container
+      - "8081"
+    networks:
+      - public-app
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:postgresql://database:5432/bank_management
+      SPRING_DATASOURCE_USERNAME: postgres
+      SPRING_DATASOURCE_PASSWORD: postgres
+    depends_on:
+      - postgres
+
+volumes:
+  postgres-data:
+
+networks:
+  public-app:
