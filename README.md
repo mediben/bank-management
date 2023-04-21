@@ -84,13 +84,13 @@ Add a deposit:
 
 Make a withdraw:
 
-- endpoint http://localhost:8083/api/transactions/deposit
+- endpoint http://localhost:8083/api/transactions/withdraw
 
 - ```json
   {
     "account": 1,
     "customer": 1,
-    "type": "deposit",
+    "type": "withdraw",
     "status": "pending",
     "archived": "false",
     "amount": 100
